@@ -16,18 +16,20 @@ import java.util.regex.Pattern;
         urlPatterns = {"/LoginServlet"},
         initParams = {
                 @WebInitParam(name = "user", value = "Akshay"),
-                @WebInitParam(name = "password", value = "BridgeLabz")
+                @WebInitParam(name = "password", value = "BridgeLabz@123")
         }
 )
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userPattern = "^[A-Z][a-zA-Z]{2,}$";
+        String passwordPattern = "^(?=.{8,})(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]*[^A-Za-z0-9][A-Za-z0-9]*$";
         String user = request.getParameter("user");
         String pwd = request.getParameter("pwd");
         String userID = getServletConfig().getInitParameter("user");
         String password = getServletConfig().getInitParameter("password");
-        if (Pattern.matches(userPattern, user) && userID.equals(user) && password.equals(pwd)) {
+        if (Pattern.matches(userPattern, user) && Pattern.matches(passwordPattern, pwd)
+                && userID.equals(user) && password.equals(pwd)) {
             request.setAttribute("user", user);
             request.getRequestDispatcher("LoginSuccess.jsp").forward(request, response);
         } else {
